@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "safeAbuelo3",
-    "slug": "safeAbuelo3",
+    "name": "safeAbuelo",
+    "slug": "safeAbuelo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "safeabuelo3",
+    "scheme": "safeabuelo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
