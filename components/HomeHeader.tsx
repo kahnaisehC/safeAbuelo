@@ -1,11 +1,31 @@
-import { globalStyles } from "@/styles/global";
+import { colors } from "@/styles/global";
 import { Text, View } from "react-native";
+import Button from "./Button";
 
 
-export default function HomeHeader() {
+type HomeHeaderProps = {
+  txt: string,
+};
+
+export default function HomeHeader(props: HomeHeaderProps) {
+
   return (
-    <View style={globalStyles.headerContainer}>
-      <Text style={globalStyles.headerText}>SafeAbuelo</Text>
+    <View >
+      <Text style={
+        {
+          color: colors.mainRed
+        }
+      }
+      >{props.txt}</Text>
+      <Button
+    backgroundColor={colors.lightBlue}
+    icon={"home"}
+    text={"im an icon ye"}
+    height={1}
+      ></Button>
+
+
+
     </View>
   );
 }

@@ -1,3 +1,4 @@
+import HomeHeader from "@/components/HomeHeader";
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -9,6 +10,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
+      <HomeHeader txt={"perritos"}>
+      </HomeHeader>
       <Text>hello world.</Text>
     </View>
   );

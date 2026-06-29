@@ -22,6 +22,7 @@ export const colors = {
 
 export const globalStyles = StyleSheet.create({
   container: {
+    color: colors.mainRed,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
