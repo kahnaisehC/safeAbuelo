@@ -5,16 +5,15 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 
-type ButtonProps= {
+type MainLinkProps= {
     backgroundColor: string,
     icon: IoniconsIconName,
     text: string,
     link: RelativePathString,
-    onClickListener:Function ,
 };
 
 
-export default function MainLink(props: ButtonProps) {
+export default function MainLink(props: MainLinkProps) {
 
 
 let buttonStyle = StyleSheet.create({

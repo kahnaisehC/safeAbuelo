@@ -1,22 +1,51 @@
-import MetodologiaDeAtaqueLink from "@/components/MetodologiaDeAtaqueLink";
-import { View } from "react-native";
+import HomeHeader from "@/components/HomeHeader";
+import MainLink from "@/components/MainLink";
+import { colors } from "@/styles/global";
+import { StyleSheet, Text, View } from "react-native";
+
+function useUser(){
+  return "Alejandro!"
+}
 
 export default function Index() {
+  let name = useUser()
   return (
     <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      style={styles.homeContainer}
     >
-      <MetodologiaDeAtaqueLink
-      date={new Date()}
-      title={"im a title!"}
-      author={"im the author!"}
-      photo={"https://images.unsplash.com/photo-1773332611476-6ec2ba68049f?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
-      replies={["im a reply!", "im another reply!"]}
-      ></MetodologiaDeAtaqueLink>
+      <HomeHeader
+        name={name}
+      />
+      <View style={styles.mainLinkContainer}>
+      <MainLink
+        backgroundColor={colors.mainRed}
+        icon={"warning-outline"}
+        text={"Estoy en PELIGRO!"}
+        link={"./peligro"}
+        />
+
+      <MainLink
+        backgroundColor={colors.mainBlue}
+        icon={"document-text-outline"}
+        text={"Repositorio"}
+        link={"./repositorio"}
+        />
+      <MainLink
+        backgroundColor={colors.mainBlue}
+        icon={"document-attach-outline"}
+        text={"Documentos"}
+        link={"./documentos"}
+        />
+      <MainLink
+        backgroundColor={colors.lightGray}
+        icon={"settings-outline"}
+        text={"Configuración"}
+        link={"./configuracion"}
+        />
+      </View>
+      <Text>
+        Sponsors +
+      </Text>
 
 
 
@@ -24,3 +53,20 @@ export default function Index() {
     </View>
   );
 }
+
+let styles = StyleSheet.create({
+  homeContainer:{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  mainLinkContainer:{
+    paddingTop: 16,
+    paddingBottom: 16,
+    gap: 16,
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "80%",
+  }
+})
