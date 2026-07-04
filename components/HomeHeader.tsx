@@ -32,12 +32,12 @@ export default function HomeHeader(props: HomeHeaderProps) {
 
 let styles = StyleSheet.create({
   headerContainer:{
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 12,
+    paddingBottom: 12,
     paddingLeft:16,
     paddingRight:16,
     
-    backgroundColor: colors.darkBlue,
+    backgroundColor: colors.mainBlue,
     width: "100%",
     display: "flex",
     flexDirection: "row",
