@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 
 
+export const fonts = {
+  text: "monospace",
+}
+
 export const colors = {
     mainBlue: "#1971C2",
     mainRed: "#C2191C",
@@ -15,7 +19,13 @@ export const colors = {
     lightBlue: "#95BBFC",
     lightRed: "#FCC6C6",
     lightYellow: "#EBE821",
-    lightGray: "E1E1E3",
+    lightGray: "#E1E1E3",
+
+    primary: "#1971C2",
+    textPrimary: "#011125",
+    textSecondary: "#6D6F74",
+    background: "#95BBFC",
+    surface: "#E1E1E3",
 
 }
 
@@ -27,8 +37,17 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
-    fontSize: 18,
-    fontWeight: "bold",
+  paragraph: {
+    fontFamily: "Nunito",
+    color: colors.mainGray,
+    padding: 2,
+  },
+
+  title1:{
+    fontFamily: "Nunito",
+    fontWeight: 700,
+    fontSize: 24,
+    padding: 2,
+    color: colors.darkBlue
   },
 });
