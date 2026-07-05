@@ -47,8 +47,10 @@ let buttonStyle = StyleSheet.create({
         size={48} />
       <Text style={
         {
+          fontWeight: 700,
           color: colors.darkGray,
           fontFamily: fonts.text,
+          width: "50%"
         }
       }
       >{props.text}</Text>
