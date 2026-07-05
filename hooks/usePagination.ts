@@ -12,6 +12,10 @@ export function usePagination<T>(url: string) {
       try {
 
         const res = await fetch(`${url}?page=${page}`);
+        if(res.status === 204){
+          console.log("no more data to fetch")
+          return
+        }
         const json = await res.json();
 
         setData(prev => {
@@ -21,13 +25,12 @@ export function usePagination<T>(url: string) {
           return prev
         });
 
-        setLoading(false);
       }
       catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
       }
 
+      setLoading(false);
     }
 
     fetchData();
