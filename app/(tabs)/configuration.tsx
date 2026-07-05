@@ -1,5 +1,5 @@
 
-import { ForoLink } from "@/components/ForoLink";
+import { ForoLink } from "@/components/_OldForoLink";
 import { View } from "react-native";
 
 export default function Configuration() {
