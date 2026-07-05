@@ -40,7 +40,7 @@ export default function Index() {
         backgroundColor={colors.lightGray}
         icon={"settings-outline"}
         text={"Configuración"}
-        link={"./configuracion"}
+        link={"./configuration"}
         />
       </View>
       <Text>

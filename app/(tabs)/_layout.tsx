@@ -8,11 +8,11 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.background,
+          backgroundColor: colors.mainBlue,
           borderTopColor: colors.surface,
         },
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarActiveTintColor: colors.lightGray,
+        tabBarInactiveTintColor: colors.darkBlue,
       }}
     >
       <Tabs.Screen
@@ -29,7 +29,7 @@ export default function TabLayout() {
         options={{
           title: 'Configuration',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name='cog' size={size} color={color} />
+            <Ionicons name='settings' size={size} color={color} />
           ),
         }}
       />
