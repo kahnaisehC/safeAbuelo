@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 
 
@@ -15,7 +15,7 @@ export type RepositorioLinkProps = {
 
 export function RepositorioLink(props: RepositorioLinkProps) {
     return (
-        <>
+        <View>
         <Text>
             Nombre: {props.Nombre} {"\n"}
         </Text>
@@ -35,6 +35,6 @@ export function RepositorioLink(props: RepositorioLinkProps) {
             EstaActivo: {props.EstaActivo ? "true" : "false"} {"\n"}
         </Text>
 
-        </>
+        </View>
     )
 }

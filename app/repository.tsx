@@ -1,6 +1,6 @@
 import { RepositorioLink, RepositorioLinkProps } from "@/components/RepositorioLink";
 import { usePagination } from "@/hooks/usePagination";
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 
 
 // TODO: change this to the actual url of the api;
@@ -24,26 +24,32 @@ export default function Repository() {
         alignItems: "center",
       }}
     >
-      {loading || !data ? (
+      {loading && !data ? (
         (
         <Text>
           keep loading
         </Text>)
         ) : (
-        data.map((repoLinkProps, index) => (
+          <FlatList
+            data={data}
+            keyExtractor={ item => item.Nombre}
+            renderItem={
+            ({item:repoLinkProps}) => (
             <RepositorioLink
-                key={index}
                 Nombre={repoLinkProps.Nombre}
                 Descripcion={repoLinkProps.Descripcion}
                 PrincipalMotorPsicologico={repoLinkProps.PrincipalMotorPsicologico}
                 SeñalesDeAlarma={repoLinkProps.SeñalesDeAlarma}
                 AccionPreventiva={repoLinkProps.AccionPreventiva}
                 EstaActivo={repoLinkProps.EstaActivo}
-            />
-        ))
-      )}
-
-
+            />)}
+            onEndReached={() => {
+              if (!loading){
+                next()
+              }
+            }}
+            onEndReachedThreshold={0.5}
+            />)}
 
     </View>
   );
