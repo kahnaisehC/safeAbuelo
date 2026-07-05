@@ -21,20 +21,26 @@ export default function Index() {
         backgroundColor={colors.mainRed}
         icon={"warning-outline"}
         text={"Estoy en PELIGRO!"}
-        link={"./peligro"}
+        link={"./danger"}
         />
 
       <MainLink
         backgroundColor={colors.mainBlue}
         icon={"document-text-outline"}
         text={"Repositorio"}
-        link={"./repositorio"}
+        link={"./repository"}
+        />
+        <MainLink
+        backgroundColor={colors.mainYellow}
+        icon={"chatbubbles-outline"}
+        text={"Foro"}
+        link={"./forum"}
         />
       <MainLink
-        backgroundColor={colors.mainBlue}
+        backgroundColor={colors.mainYellow}
         icon={"document-attach-outline"}
-        text={"Documentos"}
-        link={"./documentos"}
+        text={"Añadir caso"}
+        link={"./forum/add"}
         />
       <MainLink
         backgroundColor={colors.lightGray}

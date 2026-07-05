@@ -1,4 +1,4 @@
-import MetodologiaDeAtaqueLink from "@/components/MetodologiaDeAtaqueLink";
+import MetodologiaDeAtaqueLink from "@/components/ForoLink";
 import { View } from "react-native";
 
 export default function Profile() {
