@@ -1,119 +1,110 @@
-import { globalStyles } from "@/styles/global";
+import { ForoLinkProps } from "@/hooks/useForumPosts";
+import { colors, globalStyles } from "@/styles/global";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { Image, Text, View } from "react-native";
+import { Link } from "expo-router";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-export type ForoLinkProps = {
-    date: Date,
-    title: string,
-    author: string,
-    photo: string,
-    replies: string[],
+
+export type Evidence = {
+    Id: Number
 }
 
 
 
 export function ForoLink(props: ForoLinkProps) {
+    const [evidences, setEvidences] = useState<Evidence[]>([])
+    const [loadingEvidences, setLoading] = useState(true)
+
+    useEffect(()=>{
+        console.log("loading evidences")
+        // loadEvidences of Id
+    },[])
+
     return (
-        <View
-        style={{
-            maxWidth: 368,
-            flexDirection: "row",
-            alignItems: "center",
-            width: "100%",
-            padding: 16,
-            margin: 16,
-            backgroundColor: "#E1E1E3",
-            borderRadius: 8,
-            borderWidth: 1,
-        }}
-        >
-            <View style={{ 
-                flexDirection: "column",
-                alignItems: "center",
-                flexGrow: 0.5,
-                }}>
-                <Image style={
-                    {
-                        height: 64,
-                        width: 64,
-                        borderRadius: 32,
-                    }
-                }
-                source={{
-                    uri: props.photo
-                }} alt="photo" ></Image>
-            </View>
-            <View style={{
-                flexGrow: 3,
-                flexDirection: "column",
-            }}>
-                {/*
-                author text
-                */}
-                <Text
-                style={
-                    globalStyles.paragraph
-                }
-                >
-                    {props.author}
-                </Text>
-
-                {/*
-                title text
-                */}
-                <Text
-                style={
-                    globalStyles.title1
-                }
-                >
-                    {
-                        props.title.length > 50 ? props.title.substring(0, 50) + "..." :
-                        props.title
-                    }
-                </Text>
-                <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                }}
-                >
-
-                    <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                    >
-                    <Text
-                    style={{
-                        ...globalStyles.paragraph,
-                        padding: 4,
-                    }}
-                    >
-                        {props.date.toLocaleDateString()}
+        <Link href={`./forum/${props.id}`} style={styles.mainContainer}>
+            <View style={styles.headerContainer}>
+                <View style={styles.iconText}>
+                    <Ionicons name={"chatbubbles"} color={colors.mainBlue} size={32} />
+                    <Text>
+                        {props.plataformaDeContacto}
                     </Text>
-                    </View>
-                    <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                    >
-                        <Ionicons 
-                        style={{
-                            paddingRight: 4,
-                        }}
-                        name="chatbubble-ellipses-outline" size={20} color="black" />
-                        <Text
-                        style={
-                            globalStyles.paragraph
-                        }
-                        >
-                            {props.replies.length + " replies"}
-                        </Text>
-                    </View>
+                </View>
+                <View style={styles.iconText}>
+                    <Ionicons name={"location"} color={colors.mainBlue} size={32} />
+                    <Text>
+                        {props.localidad}
+                    </Text>
+                </View>
+                <View style={styles.iconText}>
+                    <Ionicons name={"calendar"} color={colors.mainBlue} size={32} />
+                    <Text>
+                        {props.dateTime.toDateString()}
+                    </Text>
                 </View>
             </View>
-        </View>
+            <Text style={globalStyles.paragraph}>
+                {props.descripcionDelEngaño}
+            </Text>
+            <View
+            style={styles.bottomStyles}>
+                {props.ejercePresionPsicologica &&
+                    (<Ionicons name="hammer" color={colors.mainRed} size={32}></Ionicons>)
+                }
+                {props.generaSentidoDeUrgencia && 
+                    (<Ionicons name="timer" color={colors.mainRed} size={32}></Ionicons>)}
+
+                    <Ionicons name="documents" color={colors.mainYellow} size={32}></Ionicons>
+                    <Text style={globalStyles.paragraph}>
+                        {evidences.length} evidencias
+                    </Text>
+            </View>
+        </Link>
     )
 }
+
+const styles = StyleSheet.create({
+    bottomStyles:{
+        paddingLeft: 16,
+        paddingRight: 16,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        backgroundColor: colors.lightGray,
+        width: "100%",
+        gap: 8,
+    },
+    mainContainer:{
+        gap: 16,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        borderColor: colors.lightGray,
+        borderWidth: 1,
+        margin: 16,
+        borderRadius: 8,
+    },
+
+    headerContainer:{
+        paddingLeft: 16,
+        paddingRight: 16,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around",
+        backgroundColor: colors.lightGray,
+        width: "100%",
+        gap: 8,
+    },
+
+    iconText:{
+        gap: 4,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around",
+    }
+
+})
