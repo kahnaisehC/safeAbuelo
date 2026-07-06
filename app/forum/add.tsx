@@ -3,15 +3,16 @@ import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    View,
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 enum TipoEvidencia {
   CapturaDePantalla,
@@ -140,6 +141,7 @@ export default function AddCaseScreen() {
   };
 
   return (
+    <SafeAreaView>
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Reportar un caso</Text>
 
@@ -263,6 +265,7 @@ export default function AddCaseScreen() {
         <Text style={styles.submitButtonText}>Enviar caso</Text>
       </Pressable>
     </ScrollView>
+</SafeAreaView>
   );
 }
 

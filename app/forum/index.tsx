@@ -1,6 +1,7 @@
 import { ForoLink } from "@/components/ForoLink";
 import { useForumPosts } from "@/hooks/useForumPosts";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 // TODO: change this to the actual url of the api;
@@ -13,7 +14,7 @@ export default function Forum() {
   oldForoLinks, page, setPage, hasMoreData, loading, error
     } = useForumPosts()
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         justifyContent: "center",
@@ -42,6 +43,6 @@ export default function Forum() {
             onEndReachedThreshold={0.5}
             />)}
 
-    </View>
+    </SafeAreaView>
   );
 }

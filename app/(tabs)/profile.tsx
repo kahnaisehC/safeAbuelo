@@ -1,27 +1,50 @@
-import { ForoLink } from "@/components/_OldForoLink";
-import { View } from "react-native";
+import { Ionicons } from "@react-native-vector-icons/ionicons";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function Profile() {
+export default function ProfileSection() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <ForoLink
-      id={2}
-      date={new Date()}
-      title={"im the profiel!"}
-      author={"im the profilator!"}
-      photo={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapercave.com%2Fwp%2FJneBzwV.png&f=1&nofb=1&ipt=8482278b23f5a629ff5748ad8e26d1e39e7064937d144984193baf211a690416"}
-      replies={["im a reply!", "im another reply!"]}
-      ></ForoLink>
+    <View style={styles.container}>
+      <View style={styles.avatar}>
+        <Ionicons name="person" size={42} color="#FFF" />
+      </View>
 
-
-
-
+      <View style={styles.info}>
+        <Text style={styles.name}>Alejandro Gonzalez</Text>
+        <Text style={styles.email}>alejandrogonzalez@email.com</Text>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: "#FFFFFF30",
+  },
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: "#3B82F6",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  info: {
+    flex: 1,
+  },
+  name: {
+    color: "#FFF",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  email: {
+    color: "#D1D5DB",
+    fontSize: 14,
+    marginTop: 4,
+  },
+});
