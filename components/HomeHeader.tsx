@@ -9,10 +9,6 @@ type HomeHeaderProps = {
 
 export default function HomeHeader(props: HomeHeaderProps) {
 
-
-
-
-
   return (
     <View style={styles.headerContainer}>
       <Text
