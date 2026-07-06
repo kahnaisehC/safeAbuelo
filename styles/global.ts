@@ -37,10 +37,16 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  paragraph: {
+  lightParagraph: {
     fontFamily: "Nunito",
     color: colors.mainGray,
     padding: 2,
+  },
+  paragraph:{
+    fontFamily: "Nunito",
+    color: colors.darkGray,
+    padding: 2,
+
   },
 
   title1:{
