@@ -11,6 +11,7 @@ export default function Profile() {
       }}
     >
       <ForoLink
+      id={2}
       date={new Date()}
       title={"im the profiel!"}
       author={"im the profilator!"}

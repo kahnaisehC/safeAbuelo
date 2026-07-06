@@ -2,6 +2,7 @@ import HomeHeader from "@/components/HomeHeader";
 import MainLink from "@/components/MainLink";
 import { colors } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function useUser(){
   return "Alejandro!"
@@ -10,7 +11,7 @@ function useUser(){
 export default function Index() {
   let name = useUser()
   return (
-    <View
+    <SafeAreaView
       style={styles.homeContainer}
     >
       <HomeHeader
@@ -45,7 +46,7 @@ export default function Index() {
       <MainLink
         backgroundColor={colors.lightGray}
         icon={"settings-outline"}
-        text={"Configuración"}
+        text={"Opciones"}
         link={"./configuration"}
         />
       </View>
@@ -56,7 +57,7 @@ export default function Index() {
 
 
 
-    </View>
+    </SafeAreaView>
   );
 }
 

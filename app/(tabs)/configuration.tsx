@@ -1,10 +1,10 @@
 
 import { ForoLink } from "@/components/_OldForoLink";
-import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Configuration() {
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         justifyContent: "center",
@@ -12,6 +12,7 @@ export default function Configuration() {
       }}
     >
       <ForoLink
+      id={1}
       date={new Date()}
       title={"im a configuration!"}
       author={"im the configurator!"}
@@ -19,6 +20,6 @@ export default function Configuration() {
       replies={["im a reply!", "im another reply!"]}
       ></ForoLink>
 
-    </View>
+    </SafeAreaView>
   );
 }
