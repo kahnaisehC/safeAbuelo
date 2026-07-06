@@ -66,7 +66,7 @@ export type Evidence = {
 };
 
 
-export function useCaseEvidences(caseId: number | string) {
+export function useEvidences(caseId: number | string) {
   const [evidences, setEvidences] = useState<Evidence[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);

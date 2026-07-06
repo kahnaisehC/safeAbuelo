@@ -1,3 +1,4 @@
+import { useEvidences } from "@/hooks/useEvidencias";
 import { ForoLinkProps } from "@/hooks/useForumPosts";
 import { colors, globalStyles } from "@/styles/global";
 import Ionicons from "@react-native-vector-icons/ionicons";
@@ -6,14 +7,11 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 
-export type Evidence = {
-    Id: Number
-}
 
 
 
 export function ForoLink(props: ForoLinkProps) {
-    const [evidences, setEvidences] = useState<Evidence[]>([])
+    const {evidences, loading, error } = useEvidences(1)
     const [loadingEvidences, setLoading] = useState(true)
 
     useEffect(()=>{

@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-
-
 export type ForoLinkProps ={
     id: Number ,
     dateTime: Date,
@@ -12,13 +10,6 @@ export type ForoLinkProps ={
     descripcionDelEngaño: string,
     estado: string,
 }
-
-export type Evidence = {
-    Id: Number
-}
-
-
-
 
 const pageSize = 10 
 function getPlaceHolderPosts (page: number): ForoLinkProps[] {
