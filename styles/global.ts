@@ -45,6 +45,7 @@ export const globalStyles = StyleSheet.create({
   paragraph:{
     fontFamily: "Nunito",
     color: colors.darkGray,
+    fontSize: 24,
     padding: 2,
 
   },
@@ -52,7 +53,7 @@ export const globalStyles = StyleSheet.create({
   title1:{
     fontFamily: "Nunito",
     fontWeight: 700,
-    fontSize: 24,
+    fontSize: 36,
     padding: 2,
     color: colors.darkBlue
   },
