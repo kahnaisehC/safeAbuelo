@@ -1,6 +1,25 @@
 import { useEffect, useState } from "react";
 
+export type ForoLinkProps ={
+    id: Number ,
+    dateTime: Date,
+    localidad: string,
+    plataformaDeContacto: string,
+    ejercePresionPsicologica: boolean,
+    generaSentidoDeUrgencia: boolean,
+    descripcionDelEngaño: string,
+    estado: string,
+}
 
+
+
+export type Evidence = {
+  id: number;
+  tipo: TipoEvidencia;
+  valor: string;
+  notas: string;
+  reporteIncidenteId: number;
+};
 
 enum TipoEvidencia
     {
@@ -54,16 +73,8 @@ export function TipoEvidenciaToString(t: TipoEvidencia){
         default: 
             return "Otro"
     }
-
 }
 
-export type Evidence = {
-  id: number;
-  tipo: TipoEvidencia;
-  valor: string;
-  notas: string;
-  reporteIncidenteId: number;
-};
 
 
 export function useEvidences(caseId: number | string) {

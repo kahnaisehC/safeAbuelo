@@ -57,11 +57,6 @@ for(let i = 0; i < 35; i++){
     placeHolderPosts.push(m3)
 
 }
-placeHolderPosts= placeHolderPosts
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
-
 
 export function useForumPosts() {
   const [oldForoLinks, setOldForoLinks] = useState<ForoLinkProps[]>([]);
