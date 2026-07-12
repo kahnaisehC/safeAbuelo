@@ -1,7 +1,7 @@
 // src/context/AuthContext.tsx
 import { firebaseAuth } from '@/firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { signInWithEmailAndPassword, signOut, User } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 
@@ -12,8 +12,9 @@ export interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
+  signup: (email: string, password: string) => Promise<boolean>;
 }
 
 
@@ -43,6 +44,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+  const signup = async (email: string, password: string) => {
+    try {
+        setLoading(true);
+        let userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password)
+
+        let stringToken = await userCredential.user.getIdToken()
+
+        await Promise.all([
+            AsyncStorage.setItem('authToken',stringToken),
+            AsyncStorage.setItem('userData', JSON.stringify(userCredential.user)),
+        ])
+        setToken(stringToken)
+        setUser(userCredential.user)
+
+        return true
+    } catch(error: any) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      return false;
     } finally {
       setLoading(false);
     }
@@ -87,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, loading, login, logout}}
+      value={{ user, token, isAuthenticated, loading, login, logout, signup}}
     >
       {children}
     </AuthContext.Provider>

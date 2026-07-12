@@ -13,26 +13,29 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const {isAuthenticated, loading, login} = useAuth()
+  const {isAuthenticated, loading, signup} = useAuth()
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please enter your email and password.");
+      Alert.alert("Error", "Please enter your email, password and username.");
       return;
     }
 
     try {
       // Replace with your API call
-      if(await login(email, password)){
+      if(await signup(email, password)){
         console.log({ email, password });
 
-        Alert.alert("Success", "Logged in!");
+        Alert.alert("Success", "Created account!");
         alert("Success!")
+        Redirect({
+            href: "/"
+        })
       }else{
-        throw new Error("fail login in")
+        throw new Error("fail to create account")
       }
     } catch (error) {
-      Alert.alert("Login Failed", "Invalid email or password.");
+      Alert.alert("fail to create account", "Invalid email.");
       alert("fail!")
       alert(error)
     }
@@ -40,7 +43,9 @@ export default function LoginScreen() {
   if(isAuthenticated){
     return (
         <Redirect
-            href={"/"}>
+        href={"/"}
+        >
+
         </Redirect>
     )
   }
@@ -69,8 +74,8 @@ export default function LoginScreen() {
 
 
         <Link
-        href="./signup">
-            ¿No tenés cuenta? ¡Creala!
+        href="./login">
+            ¿Ya tenés cuenta? ¡Inicia sesión!
         </Link>
     </View>
   );
