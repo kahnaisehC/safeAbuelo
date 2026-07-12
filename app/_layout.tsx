@@ -21,6 +21,7 @@ export default function RootLayout() {
           <Stack.Screen name="repository" />
           <Stack.Screen name="forum" />
           <Stack.Screen name="user" />
+          <Stack.Screen name="account" />
         </Stack>
 
 

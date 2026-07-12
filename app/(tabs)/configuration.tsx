@@ -1,18 +1,44 @@
 
+import { useAuth } from "@/context/AuthContext";
 import { colors, globalStyles } from "@/styles/global";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { Link, RelativePathString } from "expo-router";
+import { Href, Link } from "expo-router";
+import { User } from "firebase/auth";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
+interface IniciarSesionConfigProps {
+  user: User | null
+
+}
+
+function IniciarSesionConfig( props: IniciarSesionConfigProps){
+  if(!(props.user)){
+    return <ConfigurationLink
+    link={"/auth/login"}
+    name={"Iniciar sesión"}
+    ></ConfigurationLink>
+  }
+
+  return (
+    <LogoutLink
+    name={"Cerrar sesión"}
+    link={"/"}
+    >
+    </LogoutLink>
+  )
+}
+
 export default function Configuration() {
+  const {user} = useAuth()
   return (
     <SafeAreaView
       style={styles.scrollView}
     >
       <ConfigurationLink
-      link={"./profile"}
+      link={"/account"}
       name={"Cuenta"}
       >
       </ConfigurationLink>
@@ -31,11 +57,12 @@ export default function Configuration() {
       name={"Contacto de Emergencia"}
       >
       </ConfigurationLink>
-      <ConfigurationLink
-      link={"../configuration"}
-      name={"Iniciar Sesion"}
+
+      <IniciarSesionConfig
+        user={user}
       >
-      </ConfigurationLink>
+      </IniciarSesionConfig>
+
       <ConfigurationButton
         name={"Modo simple"}
         >
@@ -46,10 +73,24 @@ export default function Configuration() {
 }
 
 type ConfigurationLinkProps = {
-  link: RelativePathString,
+  link: Href,
   name: string
 
 }
+
+function LogoutLink(props: ConfigurationLinkProps){{
+  const {logout} = useAuth()
+  return (
+
+    <Pressable onPress={logout} style={styles.linkContainer}>
+      <View style={styles.leftContainer}>
+        <Ionicons color="white" name="star" size={16} />
+        <Text style={{...globalStyles.paragraph, color:"white"}} >{props.name}</Text>
+      </View>
+    </Pressable>
+  )
+
+}}
 
 function ConfigurationLink(props: ConfigurationLinkProps){
 
