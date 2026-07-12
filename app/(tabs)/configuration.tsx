@@ -43,8 +43,8 @@ export default function Configuration() {
       >
       </ConfigurationLink>
       <ConfigurationLink
-      link={"./configuration"}
-      name={"Pantalla"}
+      link={"/accessibility"}
+      name={"Accesibilidad"}
       >
       </ConfigurationLink>
       <ConfigurationLink
