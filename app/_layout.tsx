@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/context/AuthContext";
 import { colors } from "@/styles/global";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -5,6 +6,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RootLayout() {
 
   return (
+
+    <AuthProvider>
     <SafeAreaProvider>
 
         <Stack 
@@ -13,14 +16,17 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.mainBlue }
         }}
         >
+          <Stack.Screen name="auth" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="repository" />
           <Stack.Screen name="forum" />
+          <Stack.Screen name="user" />
         </Stack>
 
 
 
     </SafeAreaProvider>
+</AuthProvider>
   )
 
 }
