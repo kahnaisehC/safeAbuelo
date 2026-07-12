@@ -44,11 +44,6 @@ export default function Configuration() {
       </ConfigurationLink>
       <ConfigurationLink
       link={"./configuration"}
-      name={"Notificaciones"}
-      >
-      </ConfigurationLink>
-      <ConfigurationLink
-      link={"./configuration"}
       name={"Pantalla"}
       >
       </ConfigurationLink>
