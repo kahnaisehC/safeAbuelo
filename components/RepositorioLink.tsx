@@ -1,16 +1,12 @@
 import { Metodologia } from "@/hooks/useMetodologias";
-import { colors, globalStyles } from "@/styles/global";
-import { Link } from "expo-router";
+import { globalStyles } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
-const url = "http://192.168.1.178:42069/api/repository"
-
-
-
+const url = "???"
 
 export function RepositorioLink(props: Metodologia) {
     return (
-        <Link href={`./repository/${props.id}`}
+        <View
         style={styles.mainContainer}>
             <View style={styles.titleContainer}>
                 <Text style={globalStyles.title1}>
@@ -24,47 +20,54 @@ export function RepositorioLink(props: Metodologia) {
             <Text style={styles.motorPsicologico}>
                 {props.principalMotorPsicologico} {"\n"} 
             </Text>
-
         </View>
 
-        </Link>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    mainContainer:{
-        gap: 8,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        borderColor: colors.lightGray,
-        borderWidth: 1,
-        margin: 16,
-        borderRadius: 8,
-    },
-    motorPsicologico:{
-        padding: 2,
-        borderRadius: 16,
-        borderColor: colors.mainRed,
-        borderWidth: 1,
-        color: colors.darkRed,
+  mainContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 10,
+    marginHorizontal: 16,
 
+    // Shadow (iOS)
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    motorPsicologicoContainer:{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        padding: 2,
-        backgroundColor: colors.lightRed,
-    },
-    titleContainer:{
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        borderBottomWidth: 1,
-        borderColor: colors.darkBlue
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
 
+    // Shadow (Android)
+    elevation: 3,
+  },
 
-    }
-})
+  titleContainer: {
+    marginBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E5E5",
+    paddingBottom: 8,
+  },
+
+  motorPsicologicoContainer: {
+    marginTop: 16,
+    backgroundColor: "#F5F7FA",
+    borderLeftWidth: 4,
+    borderLeftColor: "#4F46E5",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+
+  motorPsicologico: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#374151",
+    lineHeight: 22,
+  },
+});
