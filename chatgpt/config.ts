@@ -1,1 +1,3 @@
-export default gptAPIKey = ""
+const gptAPIKey  = ""
+
+export default gptAPIKey 
