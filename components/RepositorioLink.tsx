@@ -2,7 +2,6 @@ import { Metodologia } from "@/hooks/useMetodologias";
 import { globalStyles } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
-const url = "???"
 
 export function RepositorioLink(props: Metodologia) {
     return (

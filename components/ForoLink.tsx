@@ -1,42 +1,67 @@
-import { useEvidences } from "@/hooks/useEvidencias";
-import { ForoLinkProps } from "@/hooks/useForumPosts";
+import { fetchReporteById } from "@/api/getReporte";
+import { Reporte } from "@/api/getReportes";
+import { Evidencia } from "@/api/getReporteUser";
 import { colors, globalStyles } from "@/styles/global";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 
+/*
+export interface Reporte {
+  id: number;
+  author: string;
+  dateTime: Date;
+  provincia: string;
+  localidad: string;
+  plataformaDeContacto: string;
+  plataformaOtra: string;
+  ejercePresionPsicologica: boolean;
+  generaSentidoDeUrgencia: boolean;
+  descripcionDelEngaño: string;
+  estado: string;
+}
+  */
 
 
-
-export function ForoLink(props: ForoLinkProps) {
-    const {evidences, loading, error } = useEvidences(1)
+export function ForoLink(props: Reporte) {
+    const [evidences, setEvidences] = useState<Evidencia[]>([])
     const [loadingEvidences, setLoading] = useState(true)
 
     useEffect(()=>{
-        console.log("loading evidences")
-        // loadEvidences of Id
+        setLoading(true)
+        fetchReporteById(Number(props.id))
+        .then((reporte) => {
+            setEvidences(() => {
+                return reporte.evidencias
+            })
+        })
+        .catch(console.error)
+        .finally(()=>setLoading(false))
     },[])
 
-    return (
-        <Link href={`./forum/${props.id}`} style={styles.mainContainer}>
+
+return (
+  <Link href={`./forum/${props.id}`} asChild>
+    <Pressable>
+      <View style={styles.card}>
             <View style={styles.headerContainer}>
                 <View style={styles.iconText}>
                     <Ionicons name={"chatbubbles"} color={colors.mainBlue} size={32} />
-                    <Text>
+                    <Text style={styles.metaText}>
                         {props.plataformaDeContacto}
                     </Text>
                 </View>
                 <View style={styles.iconText}>
                     <Ionicons name={"location"} color={colors.mainBlue} size={32} />
-                    <Text>
+                    <Text style={styles.metaText}>
                         {props.localidad}
                     </Text>
                 </View>
                 <View style={styles.iconText}>
                     <Ionicons name={"calendar"} color={colors.mainBlue} size={32} />
-                    <Text>
+                    <Text style={styles.metaText}>
                         {props.dateTime.toDateString()}
                     </Text>
                 </View>
@@ -57,52 +82,55 @@ export function ForoLink(props: ForoLinkProps) {
                         {evidences.length} evidencias
                     </Text>
             </View>
-        </Link>
-    )
+      </View>
+    </Pressable>
+  </Link>
+);
 }
-
 const styles = StyleSheet.create({
-    bottomStyles:{
-        paddingLeft: 16,
-        paddingRight: 16,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        backgroundColor: colors.lightGray,
-        width: "100%",
-        gap: 8,
-    },
-    mainContainer:{
-        gap: 16,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        borderColor: colors.lightGray,
-        borderWidth: 1,
-        margin: 16,
-        borderRadius: 8,
-    },
+  card: {
+    width: "100%",
+    alignSelf: "stretch",
 
-    headerContainer:{
-        paddingLeft: 16,
-        paddingRight: 16,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-around",
-        backgroundColor: colors.lightGray,
-        width: "100%",
-        gap: 8,
-    },
+    backgroundColor: "#FFF",
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 8,
 
-    iconText:{
-        gap: 4,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-around",
-    }
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
 
-})
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+  },
+
+  headerContainer: {
+    marginBottom: 12,
+  },
+
+  iconText: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+
+  metaText: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 15,
+    color: "#4B5563",
+    flexWrap: "wrap",
+  },
+
+  bottomStyles: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 16,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+  },
+});

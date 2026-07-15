@@ -1,5 +1,5 @@
+import { useAuth } from "@/context/AuthContext";
 import { colors } from "@/styles/global";
-import Ionicons from "@react-native-vector-icons/ionicons";
 import { StyleSheet, Text, View } from "react-native";
 
 
@@ -8,17 +8,16 @@ type HomeHeaderProps = {
 };
 
 export default function HomeHeader(props: HomeHeaderProps) {
+  const { user } = useAuth()
 
   return (
     <View style={styles.headerContainer}>
       <Text
        style={styles.greetings}>
-        Hello! {props.name === null ? "guest" : props.name} 
+        ¡Hola, {!user ? "anónimo" : !user.displayName ? "Ian" : user.displayName}!
       </Text>
       <View
       style={styles.iconsContainer}>
-        <Ionicons name="notifications" size={32} color={colors.lightGray} />
-        <Ionicons name="settings" size={32} color={colors.lightGray} />
       </View>
     </View>
   );
