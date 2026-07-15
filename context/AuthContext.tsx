@@ -48,6 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     }
   };
+
+  const update = () => {
+    user.updateProfile
+  }
+
   const signup = async (email: string, password: string) => {
     try {
         setLoading(true);
