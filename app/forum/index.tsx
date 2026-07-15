@@ -1,34 +1,55 @@
+import { fetchReportes, Reporte } from "@/api/getReportes";
+import BackHeader from "@/components/BackHeader";
 import { ForoLink } from "@/components/ForoLink";
-import { useForumPosts } from "@/hooks/useForumPosts";
-import { FlatList, Text } from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-// TODO: change this to the actual url of the api;
-const url = "http://192.168.1.178:42069/api/forum"
 
 export default function Forum() {
 
+    const [foroLinks, setForoLinks] = useState<Reporte[]>([])
+    const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState(1)
 
-    const {
-  oldForoLinks, page, setPage, hasMoreData, loading, error
-    } = useForumPosts()
+    useEffect(()=>{
+      setLoading(true)
+      fetchReportes(page)
+      .then(newReportes => {
+        setForoLinks(foroLinks => {
+          foroLinks.push(...newReportes)
+          return foroLinks
+        })
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false))
+
+    }, [page])
+
+
+
   return (
+
     <SafeAreaView
+    style={{ flex: 1 }}
+    >
+      <BackHeader
+      name="Foro"
+      ></BackHeader>
+    <ScrollView
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
       }}
     >
-      {loading && !oldForoLinks? (
+      {loading && !foroLinks ? (
         (
         <Text>
           keep loading
         </Text>)
         ) : (
           <FlatList
-            data={oldForoLinks}
+            data={foroLinks}
             keyExtractor={ item => item.id.toString()}
             renderItem={
             ({item:repoLinkProps}) => (
@@ -43,6 +64,7 @@ export default function Forum() {
             onEndReachedThreshold={0.5}
             />)}
 
-    </SafeAreaView>
+   </ScrollView> 
+   </SafeAreaView>
   );
 }

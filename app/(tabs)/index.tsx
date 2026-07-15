@@ -1,21 +1,19 @@
 import HomeHeader from "@/components/HomeHeader";
 import MainLink from "@/components/MainLink";
+import { useAuth } from "@/context/AuthContext";
 import { colors } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-function useUser(){
-  return "Alejandro!"
-}
 
 export default function Index() {
-  let name = useUser()
+  const {user, isAuthenticated} = useAuth()
   return (
     <SafeAreaView
       style={styles.homeContainer}
     >
       <HomeHeader
-        name={name}
+        name={user ? user.email : "Anónimo"}
       />
       <View style={styles.mainLinkContainer}>
       <MainLink
@@ -37,12 +35,12 @@ export default function Index() {
         text={"Foro"}
         link={"./forum"}
         />
-      <MainLink
+      {!!user && <MainLink
         backgroundColor={colors.mainYellow}
         icon={"document-attach-outline"}
         text={"Añadir caso"}
         link={"./forum/add"}
-        />
+        />}
       <MainLink
         backgroundColor={colors.lightGray}
         icon={"settings-outline"}

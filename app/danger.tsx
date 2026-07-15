@@ -5,12 +5,13 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert } from "react-native";
 
+import BackHeader from "@/components/BackHeader";
 import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
 } from "react-native";
 
 type Option = {
@@ -112,6 +113,9 @@ Si detectás movimientos no autorizados o necesitás ayuda, comunicate con las e
 
   return (
     <SafeAreaView>
+      <BackHeader
+      name="Estoy en PELIGRO"
+      ></BackHeader>
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Información del incidente</Text>
 

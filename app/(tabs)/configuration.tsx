@@ -1,4 +1,5 @@
 
+import BackHeader from "@/components/BackHeader";
 import { useAuth } from "@/context/AuthContext";
 import { colors, globalStyles } from "@/styles/global";
 import Ionicons from "@react-native-vector-icons/ionicons";
@@ -35,33 +36,39 @@ export default function Configuration() {
   const {user} = useAuth()
   return (
     <SafeAreaView
-      style={styles.scrollView}
+    style={{
+      flex:1,
+
+    }}
     >
-      <ConfigurationLink
-      link={"/account"}
-      name={"Cuenta"}
+      <BackHeader
+      name={"Configuración"}
+      ></BackHeader>
+      
+      <View 
+      style={styles.scrollView}
       >
-      </ConfigurationLink>
-      <ConfigurationLink
-      link={"/accessibility"}
-      name={"Accesibilidad"}
-      >
-      </ConfigurationLink>
-      <ConfigurationLink
-      link={"./configuration"}
-      name={"Contacto de Emergencia"}
-      >
-      </ConfigurationLink>
-
-      <IniciarSesionConfig
-        user={user}
-      >
-      </IniciarSesionConfig>
-
-      <ConfigurationButton
-        name={"Modo simple"}
+        <ConfigurationLink
+        link={"/profile"}
+        name={"Cuenta"}
         >
-      </ConfigurationButton>
+        </ConfigurationLink>
+        <ConfigurationLink
+        link={"/accessibility"}
+        name={"Accesibilidad"}
+        >
+        </ConfigurationLink>
+
+        <IniciarSesionConfig
+          user={user}
+        >
+        </IniciarSesionConfig>
+
+        <ConfigurationButton
+          name={"Modo simple"}
+          >
+        </ConfigurationButton>
+      </View>
 
     </SafeAreaView>
   );

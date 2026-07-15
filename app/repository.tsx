@@ -1,6 +1,7 @@
+import BackHeader from "@/components/BackHeader";
 import { RepositorioLink } from "@/components/RepositorioLink";
 import { useMetodologias } from "@/hooks/useMetodologias";
-import { FlatList, Text } from "react-native";
+import { FlatList, ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -8,9 +9,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const url = "http://192.168.1.178:42069/api/repository"
 
 export default function Repository() {
-
-
-
     const {
       metodologias, 
       page, 
@@ -23,11 +21,14 @@ export default function Repository() {
 
   return (
     <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+    style={{ flex: 1 }}
+    >
+      <BackHeader
+      name="Repositorio"
+      ></BackHeader>
+
+    <ScrollView
+    style={{ flex: 1 }}
     >
       {loading && !metodologias ? (
         (
@@ -51,6 +52,7 @@ export default function Repository() {
             onEndReachedThreshold={0.5}
             />)}
 
+    </ScrollView>
     </SafeAreaView>
   );
 }

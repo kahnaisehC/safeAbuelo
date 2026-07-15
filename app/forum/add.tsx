@@ -1,371 +1,294 @@
+import { Evidencia } from "@/api/getReporteUser";
+import { createReporte } from "@/api/postReporte";
+import BackHeader from "@/components/BackHeader";
+import { useAuth } from "@/context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
-import * as DocumentPicker from "expo-document-picker";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { Redirect } from "expo-router";
+import { useState } from "react";
 import {
   Alert,
-  Pressable,
+  Button,
   ScrollView,
-  StyleSheet,
-  Switch,
   Text,
   TextInput,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-enum TipoEvidencia {
-  CapturaDePantalla,
-  EnlaceMalicioso,
-  NumeroDeTelefono,
-  ComprobanteFinanciero,
-  DocumentoFalso,
-}
+const PROVINCIAS = ["Chaco", "Corrientes"] as const;
 
-type Evidence = {
-  id: number;
-  tipo: TipoEvidencia;
-  valor: string;
-  notas: string;
-  archivo?: DocumentPicker.DocumentPickerAsset;
-  reporteIncidenteId: number;
-};
+const LOCALIDADES = ["Resistencia", "Corrientes"] as const;
 
-const evidenceOptions = [
-  { value: TipoEvidencia.CapturaDePantalla, label: "Captura de pantalla" },
-  { value: TipoEvidencia.EnlaceMalicioso, label: "Enlace malicioso" },
-  { value: TipoEvidencia.NumeroDeTelefono, label: "Número de teléfono" },
-  { value: TipoEvidencia.ComprobanteFinanciero, label: "Comprobante financiero" },
-  { value: TipoEvidencia.DocumentoFalso, label: "Documento falso" },
-];
+const PLATAFORMAS = [
+  "WhatsApp",
+  "Facebook",
+  "Instagram",
+  "Llamada Telefonica",
+  "SMS",
+  "Correo Electronico",
+  "Otro",
+] as const;
 
-const TipoEvidenciaToString = (tipo: TipoEvidencia) => {
-  switch (tipo) {
-    case TipoEvidencia.CapturaDePantalla:
-      return "Captura de pantalla";
-    case TipoEvidencia.EnlaceMalicioso:
-      return "Enlace malicioso";
-    case TipoEvidencia.NumeroDeTelefono:
-      return "Número de teléfono";
-    case TipoEvidencia.ComprobanteFinanciero:
-      return "Comprobante financiero";
-    case TipoEvidencia.DocumentoFalso:
-      return "Documento falso";
-    default:
-      return "";
-  }
-};
+const TIPOS_EVIDENCIA = [
+  "CapturaPantalla",
+  "ComprobanteBancario",
+  "EnlaceWeb",
+  "Texto",
+] as const;
 
-export default function AddCaseScreen() {
+export default function ReporteForm() {
+  const { user, token, isAuthenticated } = useAuth();
+
+
+
+
+  const [provincia, setProvincia] = useState("");
   const [localidad, setLocalidad] = useState("");
-  const [plataforma, setPlataforma] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+  const [plataformaDeContacto, setPlataformaDeContacto] = useState("");
+  const [plataformaOtra, setPlataformaOtra] = useState("");
+  const [descripcionDelEngaño, setDescripcionDelEngaño] = useState("");
 
-  const [presion, setPresion] = useState(false);
-  const [urgencia, setUrgencia] = useState(false);
+  const [evidencias, setEvidencias] = useState<Evidencia[]>([
+  ]);
 
-  // Current evidence being edited
-  const [currentTipo, setCurrentTipo] = useState(
-    TipoEvidencia.CapturaDePantalla
-  );
-  const [currentValor, setCurrentValor] = useState("");
-  const [currentNotas, setCurrentNotas] = useState("");
-  const [currentArchivo, setCurrentArchivo] =
-    useState<DocumentPicker.DocumentPickerAsset | null>(null);
-
-  // List of evidences
-  const [evidencias, setEvidencias] = useState<Evidence[]>([]);
-
-  const pickFile = async () => {
-    const result = await DocumentPicker.getDocumentAsync({
-      multiple: false,
-    });
-
-    if (!result.canceled) {
-      setCurrentArchivo(result.assets[0]);
-    }
+  const handleEvidenceChange = (
+    index: number,
+    field: "tipo" | "valor" | "notas" | "linkEvidencia",
+    value: string
+  ) => {
+    const updated = [...evidencias];
+    updated[index][field] = value;
+    setEvidencias(updated);
   };
 
-  const handleAddEvidence = () => {
-    if (!currentValor.trim()) {
+  const addEvidence = () => {
+    setEvidencias([
+      ...evidencias,
+      {
+        id: -1,
+        tipo: "",
+        valor: "",
+        notas: "",
+        linkEvidencia: "",
+      },
+    ]);
+  };
+
+  const removeEvidence = (index: number) => {
+    setEvidencias(evidencias.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async () => {
+    if (!user) return;
+
+    if (descripcionDelEngaño.length < 20) {
       Alert.alert(
-        "Información incompleta",
-        "Ingresá el valor de la evidencia."
+        "Error",
+        "La descripción debe tener al menos 20 caracteres."
       );
       return;
     }
 
-    const newEvidence: Evidence = {
-      id: Date.now(),
-      tipo: currentTipo,
-      valor: currentValor,
-      notas: currentNotas,
-      archivo: currentArchivo ?? undefined,
-      reporteIncidenteId: 0,
-    };
+    try {
+        if(token === null){
+            throw Error("invalid token")
+        }
 
-    setEvidencias((prev) => [...prev, newEvidence]);
 
-    // Reset evidence form
-    setCurrentTipo(TipoEvidencia.CapturaDePantalla);
-    setCurrentValor("");
-    setCurrentNotas("");
-    setCurrentArchivo(null);
-  };
-
-  const handleSubmit = () => {
-    const caseData = {
-      id: 0,
-      dateTime: new Date(),
-      localidad,
-      plataformaDeContacto: plataforma,
-      ejercePresionPsicologica: presion,
-      generaSentidoDeUrgencia: urgencia,
-      descripcionDelEngaño: descripcion,
-      evidencia: evidencias,
-      estado: "Pendiente",
-    };
-
-    console.log(caseData);
-
-    Alert.alert(
-      "Caso enviado",
-      "Tu caso fue cargado correctamente y se encuentra bajo revisión. Una vez validado, será publicado en la plataforma.",
-      [
+      await createReporte(
         {
-          text: "Aceptar",
-          onPress: () => router.replace("/"),
+          authorId: user.uid,
+          provincia,
+          localidad,
+          plataformaDeContacto,
+          plataformaOtra,
+          descripcionDelEngaño,
+          evidencias: evidencias.filter(item => item.tipo !== "")
         },
-      ]
-    );
+        token
+      );
+
+      Alert.alert("Éxito", "Reporte enviado correctamente.");
+
+      setProvincia("");
+      setLocalidad("");
+      setPlataformaDeContacto("");
+      setPlataformaOtra("");
+      setDescripcionDelEngaño("");
+      setEvidencias([]);
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Error", "No se pudo enviar el reporte.");
+    }
   };
+
+  if(!isAuthenticated || token === null)return (
+    <Redirect href={"/"}></Redirect>
+  )
+
 
   return (
     <SafeAreaView>
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Reportar un caso</Text>
-
-      <Text style={styles.label}>Localidad</Text>
-      <TextInput
-        style={styles.input}
-        value={localidad}
-        onChangeText={setLocalidad}
-      />
-
-      <Text style={styles.label}>Plataforma de contacto</Text>
-      <TextInput
-        style={styles.input}
-        value={plataforma}
-        onChangeText={setPlataforma}
-      />
-
-      <Text style={styles.label}>Descripción del engaño</Text>
-      <TextInput
-        style={[styles.input, styles.multiline]}
-        multiline
-        value={descripcion}
-        onChangeText={setDescripcion}
-      />
-
-      <View style={styles.switchRow}>
-        <Text style={styles.switchLabel}>
-          ¿Ejercía presión psicológica?
-        </Text>
-        <Switch value={presion} onValueChange={setPresion} />
-      </View>
-
-      <View style={styles.switchRow}>
-        <Text style={styles.switchLabel}>
-          ¿Generaba sentido de urgencia?
-        </Text>
-        <Switch value={urgencia} onValueChange={setUrgencia} />
-      </View>
-
-      {/* ------------------ Evidences ------------------ */}
-
-      <Text style={styles.sectionTitle}>Evidencias</Text>
-
-      <Text style={styles.label}>Tipo</Text>
-
+      <BackHeader
+      name="Añadir caso"
+      ></BackHeader>
+    <ScrollView
+      contentContainerStyle={{
+        padding: 20,
+        gap: 16,
+      }}
+    >
+      <Text>Provincia</Text>
       <Picker
-        selectedValue={currentTipo}
-        onValueChange={(value) => setCurrentTipo(value)}
+        selectedValue={provincia}
+        onValueChange={setProvincia}
       >
-        {evidenceOptions.map((option) => (
-          <Picker.Item
-            key={option.value}
-            label={option.label}
-            value={option.value}
-          />
+        <Picker.Item label="Seleccione una provincia" value="" />
+        {PROVINCIAS.map((p) => (
+          <Picker.Item key={p} label={p} value={p} />
         ))}
       </Picker>
 
-      <Text style={styles.label}>Valor</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="URL, teléfono, descripción, etc."
-        value={currentValor}
-        onChangeText={setCurrentValor}
-      />
-
-      <Text style={styles.label}>Notas</Text>
-
-      <TextInput
-        style={[styles.input, styles.multilineSmall]}
-        multiline
-        value={currentNotas}
-        onChangeText={setCurrentNotas}
-      />
-
-      <Pressable style={styles.uploadButton} onPress={pickFile}>
-        <Text style={styles.uploadButtonText}>
-          {currentArchivo
-            ? currentArchivo.name
-            : "Subir archivo (opcional)"}
-        </Text>
-      </Pressable>
-
-      <Pressable
-        style={styles.addEvidenceButton}
-        onPress={handleAddEvidence}
+      <Text>Localidad</Text>
+      <Picker
+        selectedValue={localidad}
+        onValueChange={setLocalidad}
       >
-        <Text style={styles.buttonText}>Agregar evidencia</Text>
-      </Pressable>
+        <Picker.Item label="Seleccione una localidad" value="" />
+        {LOCALIDADES.map((l) => (
+          <Picker.Item key={l} label={l} value={l} />
+        ))}
+      </Picker>
 
-      {evidencias.length > 0 && (
-        <>
-          <Text style={styles.sectionTitle}>Evidencias agregadas</Text>
+      <Text>Plataforma de contacto</Text>
+      <Picker
+        selectedValue={plataformaDeContacto}
+        onValueChange={setPlataformaDeContacto}
+      >
+        <Picker.Item label="Seleccione una plataforma" value="" />
+        {PLATAFORMAS.map((p) => (
+          <Picker.Item key={p} label={p} value={p} />
+        ))}
+      </Picker>
 
-          {evidencias.map((evidence) => (
-            <View key={evidence.id} style={styles.evidenceCard}>
-              <Text style={styles.evidenceTitle}>
-                {TipoEvidenciaToString(evidence.tipo)}
-              </Text>
-
-              <Text>{evidence.valor}</Text>
-
-              {evidence.notas ? (
-                <Text style={styles.notes}>
-                  {evidence.notas}
-                </Text>
-              ) : null}
-
-              {evidence.archivo && (
-                <Text style={styles.file}>
-                  📎 {evidence.archivo.name}
-                </Text>
-              )}
-            </View>
-          ))}
-        </>
+      {plataformaDeContacto === "Otro" && (
+        <TextInput
+          placeholder="Especifique la plataforma"
+          value={plataformaOtra}
+          onChangeText={setPlataformaOtra}
+          style={{
+            borderWidth: 1,
+            padding: 10,
+            borderRadius: 8,
+          }}
+        />
       )}
 
-      <Pressable style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Enviar caso</Text>
-      </Pressable>
+      <Text>Descripción del engaño</Text>
+      <TextInput
+        value={descripcionDelEngaño}
+        onChangeText={setDescripcionDelEngaño}
+        multiline
+        numberOfLines={5}
+        style={{
+          borderWidth: 1,
+          padding: 10,
+          borderRadius: 8,
+          textAlignVertical: "top",
+        }}
+      />
+
+      <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 18,
+        }}
+      >
+        Evidencias
+      </Text>
+
+      {evidencias.map((evidencia, index) => (
+        <View
+          key={index}
+          style={{
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 8,
+            padding: 12,
+            gap: 10,
+          }}
+        >
+          <Text>Tipo</Text>
+
+          <Picker
+            selectedValue={evidencia.tipo}
+            onValueChange={(value) =>
+              handleEvidenceChange(index, "tipo", value)
+            }
+          >
+            <Picker.Item label="Seleccione un tipo" value="" />
+            {TIPOS_EVIDENCIA.map((t) => (
+              <Picker.Item key={t} label={t} value={t} />
+            ))}
+          </Picker>
+
+          <TextInput
+            placeholder="Valor"
+            value={evidencia.valor}
+            onChangeText={(text) =>
+              handleEvidenceChange(index, "valor", text)
+            }
+            style={{
+              borderWidth: 1,
+              padding: 10,
+              borderRadius: 8,
+            }}
+          />
+
+          <TextInput
+            placeholder="Notas"
+            value={evidencia.notas}
+            onChangeText={(text) =>
+              handleEvidenceChange(index, "notas", text)
+            }
+            style={{
+              borderWidth: 1,
+              padding: 10,
+              borderRadius: 8,
+            }}
+          />
+
+          <TextInput
+            placeholder="Link (opcional)"
+            value={evidencia.linkEvidencia}
+            onChangeText={(text) =>
+              handleEvidenceChange(index, "linkEvidencia", text)
+            }
+            style={{
+              borderWidth: 1,
+              padding: 10,
+              borderRadius: 8,
+            }}
+          />
+
+        <Button
+            title="Eliminar evidencia"
+            color="red"
+            onPress={() => removeEvidence(index)}
+        />
+        </View>
+      ))}
+
+      <Button
+        title="Agregar evidencia"
+        onPress={addEvidence}
+      />
+
+      <Button
+        title="Enviar reporte"
+        onPress={handleSubmit}
+      />
     </ScrollView>
 </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    paddingBottom: 40,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 20,
-  },
-  label: {
-    fontWeight: "600",
-    marginTop: 14,
-    marginBottom: 6,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#DDD",
-    borderRadius: 8,
-    padding: 12,
-  },
-  multiline: {
-    minHeight: 120,
-    textAlignVertical: "top",
-  },
-  multilineSmall: {
-    minHeight: 80,
-    textAlignVertical: "top",
-  },
-  switchRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 18,
-  },
-  switchLabel: {
-    flex: 1,
-    fontSize: 16,
-  },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    marginTop: 30,
-    marginBottom: 10,
-  },
-  uploadButton: {
-    backgroundColor: "#F3F4F6",
-    padding: 14,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 12,
-  },
-  uploadButtonText: {
-    fontWeight: "600",
-  },
-  addEvidenceButton: {
-    backgroundColor: "#16A34A",
-    padding: 14,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 16,
-  },
-  buttonText: {
-    color: "#FFF",
-    fontWeight: "700",
-  },
-  evidenceCard: {
-    borderWidth: 1,
-    borderColor: "#DDD",
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 12,
-  },
-  evidenceTitle: {
-    fontWeight: "700",
-    marginBottom: 4,
-  },
-  notes: {
-    marginTop: 6,
-    color: "#666",
-    fontStyle: "italic",
-  },
-  file: {
-    marginTop: 8,
-    color: "#2563EB",
-  },
-  submitButton: {
-    backgroundColor: "#2563EB",
-    padding: 16,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 30,
-  },
-  submitButtonText: {
-    color: "#FFF",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-});

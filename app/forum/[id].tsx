@@ -1,6 +1,7 @@
-import { TipoEvidenciaToString, useEvidences } from "@/hooks/useEvidencias";
-import { useForumPosts } from "@/hooks/useForumPosts";
+import { fetchReporteById } from "@/api/getReporte";
+import { UserReporte } from "@/api/getReporteUser";
 import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -31,31 +32,24 @@ export type Evidence = {
 
 export default function forumPostPage(){
     let { id } = useLocalSearchParams();
-    if(typeof id === 'object'){
-        id = "1"
-    }
-    let idNumber = parseInt(id)
-    if(idNumber < 35){
-        idNumber = 3
-    }else if(idNumber < 70){
-        idNumber = 1
-    }
-    else{
-        idNumber = 2;
+    const [post, setPost] = useState<UserReporte>()
+    const [loading, setLoading] = useState(false)
+
+    let idNumber:number
+    if(typeof id === "string"){
+      idNumber = Number(id)
+    }else{
+      idNumber = 1
     }
 
 
-
-
-    console.log(idNumber)
-    const {oldForoLinks, loading} = useForumPosts()
-    const post = oldForoLinks[idNumber]
-    console.log(post)
-    const {evidences} = useEvidences(idNumber)
-    console.log(oldForoLinks)
-
-
-
+    useEffect(()=>{
+      setLoading(true)
+      fetchReporteById(idNumber)
+      .then(setPost)
+      .catch(console.error)
+      .finally(()=>setLoading(false))
+      },[])
   return (
     <SafeAreaView style={styles.card}>
         {!loading && post !== undefined && (<>
@@ -98,13 +92,13 @@ export default function forumPostPage(){
 
       <Text style={styles.evidenceTitle}>Evidencias</Text>
 
-      {evidences.length === 0 ? (
+      {post.evidencias.length === 0 ? (
         <Text style={styles.empty}>No hay evidencias.</Text>
       ) : (
-        evidences.map((evidence) => (
+        post.evidencias.map((evidence) => (
           <View key={evidence.id} style={styles.evidenceCard}>
             <Text style={styles.evidenceType}>
-              {TipoEvidenciaToString(evidence.tipo)}
+              {(evidence.tipo)}
             </Text>
 
             <Text style={styles.evidenceValue}>
