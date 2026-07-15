@@ -1,3 +1,4 @@
+import { apiString } from "@/api/config";
 import { useEffect, useState } from "react";
 
 export type Metodologia = {
@@ -24,7 +25,7 @@ export function useMetodologias() {
         setLoading(true);
 
         const response = await fetch(
-            `http://safeabuelo.runasp.net/api/MetodologiasApi?pagina=${page}`
+            `${apiString}/MetodologiasApi?pagina=${page}`
         );
 
         if (!response.ok) {
