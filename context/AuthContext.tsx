@@ -1,4 +1,5 @@
 // src/context/AuthContext.tsx
+import { apiString } from '@/api/config';
 import { firebaseAuth } from '@/firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
@@ -20,6 +21,34 @@ export interface AuthContextType {
 
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+
+interface syncUserProps{
+  Token: string;
+  NombreCompleto: string;
+  Telefono: string;
+  Email: string;
+}
+
+async function syncUser(data: syncUserProps){
+  const response = await fetch(`${apiString}/usuariosApi/sincronizar`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${data.Token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(
+      `Failed to sincrronize user (${response.status}): ${message}`
+    );
+  }
+}
+
+
+
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -49,10 +78,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const update = () => {
-    user.updateProfile
-  }
-
   const signup = async (email: string, password: string) => {
     try {
         setLoading(true);
@@ -64,6 +89,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             AsyncStorage.setItem('authToken',stringToken),
             AsyncStorage.setItem('userData', JSON.stringify(userCredential.user)),
         ])
+
+
+
         setToken(stringToken)
         setUser(userCredential.user)
 
